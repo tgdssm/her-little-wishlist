@@ -32,11 +32,10 @@ Precisa ser via servidor — abrir o arquivo direto (`file://`) não carrega mó
    `SEU-USUARIO.github.io` (localhost já vem liberado).
 5. **App web**: *Project settings → Your apps → `</>`* → copie o objeto `firebaseConfig` para
    `js/config.js`. Essa config é pública por natureza — quem protege os dados são as regras.
-6. **Regras**: cole `firestore.rules` em *Firestore → Rules → Publish*
-   (ou `firebase deploy --only firestore:rules` com a Firebase CLI).
-   Hoje está em modo "aberto": qualquer conta Google logada lê e escreve. Para restringir
-   só a vocês dois, troque `isHer()`/`isAdmin()` pelas versões comentadas com os e-mails
-   (**em minúsculas**).
+6. **Regras**: copie `firestore.rules.example` para `firestore.rules`, coloque os e-mails Google
+   de vocês (**em minúsculas**) e cole em *Firestore → Rules → Publish*
+   (ou `firebase deploy --only firestore:rules`). O `firestore.rules` com os e-mails reais fica
+   fora do git, para eles não aparecerem no repositório público.
 
 ## Publicar no GitHub Pages
 
@@ -96,8 +95,8 @@ Para ver a tela sem fazer login: `http://localhost:8080/?demo` (só funciona no 
 
 ## Segurança — resumo
 
-- Sem login: **bloqueado**. No modo atual, qualquer conta Google logada acessa a lista;
-  com os e-mails preenchidos, só vocês dois (ela escreve, você só lê).
+- Sem login: **bloqueado**. Só os dois e-mails das regras, verificados pelo Google: ela lê e
+  escreve; você só lê.
 - Validação no servidor: texto 1–500 caracteres, categorias da lista, campos fixos, timestamps.
 - Nenhuma senha ou chave privada no JavaScript. Esconder `admin.html` é só conveniência — a
   proteção real são as regras.

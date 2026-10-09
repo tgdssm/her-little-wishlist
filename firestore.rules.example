@@ -1,9 +1,10 @@
 rules_version = '2';
 
 // ─────────────────────────────────────────────────────────────
-//  "Open" mode: any signed-in Google account can read and write.
-//  To restrict it to just the two of you later, swap isHer()/isAdmin()
-//  for the commented signedInAs(...) versions below.
+//  Locked to two Google accounts (emails in lowercase):
+//   isHer()   → can read and write the wishlist
+//   isAdmin() → can only read it (admin.html)
+//  Copy to firestore.rules and fill in the two emails.
 // ─────────────────────────────────────────────────────────────
 
 service cloud.firestore {
@@ -14,10 +15,8 @@ service cloud.firestore {
         && request.auth.token.email == email
         && request.auth.token.email_verified == true;
     }
-    function isHer()   { return request.auth != null; }
-    function isAdmin() { return request.auth != null; }
-    // function isHer()   { return signedInAs('her.email@gmail.com'); }
-    // function isAdmin() { return signedInAs('your.email@gmail.com'); }
+    function isHer()   { return signedInAs('her.email@gmail.com'); }
+    function isAdmin() { return signedInAs('your.email@gmail.com'); }
 
     function validCategory(c) {
       return c == null || c in ['places', 'food', 'adventures', 'little_moments', 'affection', 'intimate', 'anything_else'];
