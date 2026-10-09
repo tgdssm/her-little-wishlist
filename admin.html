@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1b1220">
+  <title>Her Wishlist ❤️</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Nunito:wght@400;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin">
+  <div class="scene" aria-hidden="true"><div class="scene-glow"></div></div>
+
+  <div class="demo-banner" id="demo-banner" hidden>Demo mode — showing the wishes saved in this browser.</div>
+
+  <main class="admin-wrap">
+    <section class="card admin-signin" id="admin-signin" hidden>
+      <h1>Her Wishlist ❤️</h1>
+      <p>Private page. Sign in with your Google account.</p>
+      <button class="btn btn-google" id="admin-google" type="button">Continue with Google</button>
+      <p class="form-error" id="admin-error" role="alert" hidden></p>
+    </section>
+
+    <section class="card admin-board" id="admin-board" hidden>
+      <header class="admin-head">
+        <div>
+          <h1>Her Wishlist ❤️</h1>
+          <p class="admin-sub"><strong id="admin-count">…</strong> <span id="admin-updated"></span></p>
+        </div>
+        <div class="admin-actions">
+          <button class="btn btn-ghost btn-small" id="copy-btn" type="button">Copy as text</button>
+          <button class="btn btn-ghost btn-small" id="download-btn" type="button">Download .md</button>
+          <button class="btn btn-ghost btn-small" id="admin-signout" type="button">Sign out</button>
+        </div>
+      </header>
+
+      <div class="admin-filters" id="admin-filters" role="toolbar" aria-label="Filter by category"></div>
+
+      <div class="admin-tools">
+        <label class="admin-search">
+          <span class="sr-only">Search</span>
+          <input id="admin-search" type="search" placeholder="Search wishes…">
+        </label>
+        <label class="admin-toggle"><input type="checkbox" id="hide-planned"> Hide planned</label>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr><th scope="col" class="col-check"><span class="sr-only">Planned</span>✓</th><th scope="col">Wish</th><th scope="col">Category</th><th scope="col" class="col-date">Added</th></tr>
+        </thead>
+        <tbody id="admin-rows"></tbody>
+      </table>
+      <p class="admin-empty" id="admin-empty" hidden>No wishes here yet.</p>
+      <p class="admin-note">“Planned” checkmarks are only stored in this browser, just for you — she never sees them.</p>
+    </section>
+  </main>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

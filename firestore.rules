@@ -1,0 +1,58 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────
+//  "Open" mode: any signed-in Google account can read and write.
+//  To restrict it to just the two of you later, swap isHer()/isAdmin()
+//  for the commented signedInAs(...) versions below.
+// ─────────────────────────────────────────────────────────────
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedInAs(email) {
+      return request.auth != null
+        && request.auth.token.email == email
+        && request.auth.token.email_verified == true;
+    }
+    function isHer()   { return request.auth != null; }
+    function isAdmin() { return request.auth != null; }
+    // function isHer()   { return signedInAs('her.email@gmail.com'); }
+    // function isAdmin() { return signedInAs('your.email@gmail.com'); }
+
+    function validCategory(c) {
+      return c == null || c in ['places', 'food', 'adventures', 'little_moments', 'affection', 'intimate', 'anything_else'];
+    }
+    function validItem(d) {
+      return d.keys().hasOnly(['text', 'category', 'createdAt', 'updatedAt'])
+        && d.keys().hasAll(['text', 'category', 'createdAt', 'updatedAt'])
+        && d.text is string
+        && d.text.trim().size() > 0
+        && d.text.size() <= 500
+        && validCategory(d.category)
+        && d.createdAt is timestamp
+        && d.createdAt <= request.time
+        && d.updatedAt == request.time;
+    }
+
+    // The single wishlist: wishlists/ours
+    match /wishlists/{listId} {
+      allow read: if listId == 'ours' && (isHer() || isAdmin());
+      allow create, update: if listId == 'ours' && isHer()
+        && request.resource.data.keys().hasOnly(['updatedAt'])
+        && request.resource.data.updatedAt == request.time;
+
+      match /items/{itemId} {
+        allow read: if listId == 'ours' && (isHer() || isAdmin());
+        allow create: if listId == 'ours' && isHer() && validItem(request.resource.data);
+        allow update: if listId == 'ours' && isHer() && validItem(request.resource.data)
+          && request.resource.data.createdAt == resource.data.createdAt;
+        allow delete: if listId == 'ours' && isHer();
+      }
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
